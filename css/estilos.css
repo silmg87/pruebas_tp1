@@ -11,6 +11,7 @@ ul {
 }
 
 body {
+    /* FONDO UTILIZADO https://coolors.co/gradient/696eff-f8acff */
     background: hsla(238, 100%, 71%, 1);
     background: linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
     background: -moz-linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
