@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 1.5em;
+    /* outline: 1px solid red; */
+}
+
+ul {
+    padding: 0;
+}
+
+body {
+    background: hsla(238, 100%, 71%, 1);
+    background: linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
+    background: -moz-linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
+    background: -webkit-linear-gradient(90deg, hsla(238, 100%, 71%, 1) 0%, hsla(295, 100%, 84%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#696EFF", endColorstr="#F8ACFF", GradientType=1 );
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: white;
+    background-attachment: fixed;
+}
+
+.clima {
+    background-color: rgba(255, 255, 255, .3);
+    margin: 0px 20px;
+}
+
+[type=submit]:not(:disabled) {
+    color: white;
+    border-color: white;
+    font-weight: bold;
+}
+
+#temperaturaActual p {
+    font-size: 4em;
+}
+
+main {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+main div:nth-child(2),
+main div:nth-child(3) {
+    width: 100%;
+    margin: 1.5em auto;
+}
+
+ul li {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    padding-bottom: .5em;
+}
+
+#zona p,
+#temperaturaInfo div p {
+    font-style: italic;
+    font-size: 1.5em;
+}
+
+
+@media screen and (min-width: 1024px) {
+    main div:nth-child(2),
+    main div:nth-child(3) {
+    width: 75%;
+    }
+
+    ul li {
+        width: 75%;
+    }
+    
+}
