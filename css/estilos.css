@@ -65,6 +65,10 @@ ul li {
     font-size: 1.5em;
 }
 
+img {
+    max-width: 200px;
+}
+
 
 @media screen and (min-width: 1024px) {
     main div:nth-child(2),
