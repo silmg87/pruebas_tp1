@@ -11,26 +11,28 @@
 </head>
 <body>
     <main>
-        <div class="container text-center mt-5">
-            <h1 class="m-3">Aplicación de Clima</h1>
-            <div>
-                <form class="d-flex" role="search">
-                    <input id="inputCiudad" class="form-control me-2" type="search" placeholder="Ingresa un país o ciudad" aria-label="Search">
-                    <button id="buscar" class="btn" type="submit">Buscar</button>
-                </form>
-            </div>
-            <div class="clima rounded p-3">
-                <div id="zona"></div>
-                <div id="icono">
-                    <img src="imagenes/dia-nublado.png" width="150" height="150" alt="">
+        <section>
+            <div class="container text-center mt-5">
+                <h1 class="m-3">Aplicación de Clima</h1>
+                <div>
+                    <form class="d-flex" role="search">
+                        <input id="inputCiudad" class="form-control me-2" type="search" placeholder="Ingresa un país o ciudad" aria-label="Search">
+                        <button id="buscar" class="btn" type="submit">Buscar</button>
+                    </form>
                 </div>
-                <div id="temperaturaActual"></div>
-                <div id="temperaturaInfo"></div>
-                <div id="mapa"></div>
-                <div id="mostrarAnterior"></div>
+                <div class="clima rounded p-3">
+                    <div id="zona"></div>
+                    <div id="icono"></div>
+                    <div id="temperaturaActual"></div>
+                    <div id="temperaturaInfo"></div>
+                    <div id="mapa"></div>
+                </div>
             </div>
-            
-        </div>
+        </section>
+        <section>
+            <div id="mostrarAnterior"></div>
+        </section>
+        
     </main>
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"></script>

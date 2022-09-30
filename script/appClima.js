@@ -2,8 +2,8 @@ const APIKEYCLIMA = '9dcc1818ed8b1b9cf09902249070fb83';
 const btn = document.getElementById('buscar');
 const inputCiudad = document.getElementById('inputCiudad');
 const resultadoTemp = document.getElementById('temperaturaActual');
-const resultadoIcono = document.getElementById('icono');
 const resultadoZona = document.getElementById('zona');
+const resultadoIcono = document.getElementById('icono');
 const resultadoInfo = document.getElementById('temperaturaInfo');
 const maps = document.getElementById('mapa');
 let divZona = '';
@@ -12,27 +12,29 @@ let icono = '';
 let info = '';
 let divMapa = '';
 
-function busquedasAnteriores() {
-    let guardarDatos = '';
-    for (let clave in recuperar_localStorage) {
-        guardarDatos += `<div>
-                            <p class="datos">
-                            <span> ${recuperar_localStorage[clave].ciudad}</span>
-                            <span> ${recuperar_localStorage[clave].temp}</span>
-                            <span>${recuperar_localStorage[clave].info.descripcion}</span>
-                            <span>${recuperar_localStorage[clave].info.max}</span>
-                            <span>${recuperar_localStorage[clave].info.min}</span>
-                            <span>${recuperar_localStorage[clave].info.hum}</span>
-                            <span>${recuperar_localStorage[clave].info.st}</span>
-                            <span>${recuperar_localStorage[clave].info.presAt}</span>
-                            <span>${recuperar_localStorage[clave].info.velViento}</span>
-                            </p>
-                        </div>`
-    }
-
-    document.querySelector("#mostrarAnterior").innerHTML = guardarDatos;
-    inputCiudad.value = ''; 
-}
+// function mostrarBusquedas() {
+//     if(localStorage.busqueda){
+//         recuperar_localStorage = JSON.parse(localStorage.getItem("busqueda"));
+//         let guardarDatos = '';
+//     for (let clave in recuperar_localStorage) {
+//         guardarDatos += `<div>
+//                             <h2>Vistos recientemente</h2>
+//                             <p class="datos">
+//                             <span>${recuperar_localStorage[clave].ciudad}</span>
+//                             <span>${recuperar_localStorage[clave].temp}</span>
+//                             <span>${recuperar_localStorage[clave].info.descripcion}</span>
+//                             <span>${recuperar_localStorage[clave].info.max}</span>
+//                             <span>${recuperar_localStorage[clave].info.min}</span>
+//                             <span>${recuperar_localStorage[clave].info.hum}</span>
+//                             <span>${recuperar_localStorage[clave].info.st}</span>
+//                             <span>${recuperar_localStorage[clave].info.presAt}</span>
+//                             <span>${recuperar_localStorage[clave].info.velViento}</span>
+//                             </p>
+//                         </div>`
+//     }
+//     document.querySelector("#mostrarAnterior").innerHTML = guardarDatos;
+//     }
+// }
 
 btn.addEventListener('click', event => {
     event.preventDefault();
@@ -48,6 +50,11 @@ btn.addEventListener('click', event => {
         divZona = `<p>${json.name}</p>`;
         resultadoZona.innerHTML = divZona;
         divZona = '';
+
+        icono = json.weather[0].icon;
+        
+        resultadoIcono.innerHTML = icono;
+        icono = '';
 
         tempActual = `<p>${Math.round(json.main.temp)}°</p>`;
         resultadoTemp.innerHTML = tempActual;
@@ -89,39 +96,17 @@ btn.addEventListener('click', event => {
             }
                 array_clima.push(datosClima);
                 localStorage.setItem("busqueda", JSON.stringify(array_clima));	
-                recuperar_localStorage = JSON.parse(localStorage.getItem("busqueda"));
+                
         }
 
         guardarLocalStorage();
-        
-        function busquedasAnteriores() {
-            let guardarDatos = '';
-            for (let clave in recuperar_localStorage) {
-                guardarDatos += `<div>
-                                    <p class="datos">
-                                    <span> ${recuperar_localStorage[clave].ciudad}</span>
-                                    <span> ${recuperar_localStorage[clave].temp}</span>
-                                    <span>${recuperar_localStorage[clave].info.descripcion}</span>
-                                    <span>${recuperar_localStorage[clave].info.max}</span>
-                                    <span>${recuperar_localStorage[clave].info.min}</span>
-                                    <span>${recuperar_localStorage[clave].info.hum}</span>
-                                    <span>${recuperar_localStorage[clave].info.st}</span>
-                                    <span>${recuperar_localStorage[clave].info.presAt}</span>
-                                    <span>${recuperar_localStorage[clave].info.velViento}</span>
-                                    </p>
-                                </div>`
-            }
-        
-            document.querySelector("#mostrarAnterior").innerHTML = guardarDatos;
-            inputCiudad.value = ''; 
-        }
-        busquedasAnteriores();
-        
     })
     
     .catch(error=>{console.log(`Ocurrió un error: ${error}`)})
-    
-  
-    
-     
+
 });
+
+// mostrarBusquedas();
+// document.body.onload = mostrarBusquedas();
+
+
