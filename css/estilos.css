@@ -79,5 +79,9 @@ img {
     ul li {
         width: 75%;
     }
+
+    #mapa {
+        width: 700px;
+    }
     
 }
