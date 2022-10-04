@@ -64,13 +64,13 @@ const iconos = [
     },
     {
         id: '10d',
-        descripcion: 'Parcialmente cubierto con lluvias',
+        descripcion: 'Parcialmente nublado con lluvias',
         imagen: '../imagenes/dia-lluvioso.png',
         alt: 'Día con lluvias',
     },
     {
         id: '10n',
-        descripcion: 'Parcialmente cubierto con lluvias',
+        descripcion: 'Parcialmente nublado con lluvias',
         imagen: '../imagenes/noche-lluviosa.png',
         alt: 'Noche con luvias',
     },
@@ -101,59 +101,115 @@ const iconos = [
     {
         id: '50d',
         descripcion: 'Neblinas',
-        imagen: '../imagenes/nieblas.png',
+        imagen: '../imagenes/niebla.png',
         alt: 'Día con nieblas',
     },
     {
         id: '50n',
         descripcion: 'Neblinas',
-        imagen: '../imagenes/nieblas.png',
+        imagen: '../imagenes/niebla.png',
         alt: 'Noche con nieblas',
     },
 ];
+
 
 // DECLARACION DE VARIABLES
 const APIKEYCLIMA = '9dcc1818ed8b1b9cf09902249070fb83';
 const btn = document.getElementById('buscar');
 const inputCiudad = document.getElementById('inputCiudad');
+const APIKEYMAPA = 'hE3wpAzogyZc3rgzoZJCGCFXQ8TLgF9k';
+let recuperar_localStorage;
 
-const resultadoTemp = document.getElementById('temperaturaActual');
-const resultadoZona = document.getElementById('zona');
-const resultadoIcono = document.getElementById('icono');
-const resultadoInfo = document.getElementById('temperaturaInfo');
-const maps = document.getElementById('mapa');
-let divZona = '';
-let tempActual = '';
-let icono = '';
-let info = '';
-let divMapa = '';
 
-// FUNCION PARA MOSTRAR DATOS DEL LOCALSTORAGE
-function mostrarBusquedas() {
-    if(localStorage.busqueda){
-        recuperar_localStorage = JSON.parse(localStorage.getItem("busqueda"));
-        let guardarDatos = '';
-    for (let clave in recuperar_localStorage) {
-        guardarDatos += `<div>
-                            <h2>Vistos recientemente</h2>
-                            <p class="datos">
-                            <span>${recuperar_localStorage[clave].ciudad}</span>
-                            <span>${recuperar_localStorage[clave].temp}</span>
-                            <span>${recuperar_localStorage[clave].info.descripcion}</span>
-                            <span>${recuperar_localStorage[clave].info.max}</span>
-                            <span>${recuperar_localStorage[clave].info.min}</span>
-                            <span>${recuperar_localStorage[clave].info.hum}</span>
-                            <span>${recuperar_localStorage[clave].info.st}</span>
-                            <span>${recuperar_localStorage[clave].info.presAt}</span>
-                            <span>${recuperar_localStorage[clave].info.velViento}</span>
-                            </p>
-                        </div>`
+// FUNCION RESULTADO DEL CLIMA
+let divClima = document.createElement('div');
+divClima.id = 'clima';
+
+const resultadoClima = (json) => {
+    divClima.innerHTML = '';
+    divClima.className = 'clima rounded p-3';
+
+    let divZona = document.createElement('div');
+    divZona.id = 'zona';
+    let pZona = document.createElement('p');
+    divZona.append(pZona);
+    pZona.innerHTML = json.name;
+    
+    let divImg = document.createElement('div');
+    divImg.id = 'icono';
+
+    for (let i of iconos) {
+        let icon = json.weather[0].icon;
+        if (icon === i.id) {
+            divImg.innerHTML = `<img src="${i.imagen}" alt="${i.alt}"/>`;
+        } 
     }
 
-    document.querySelector("#mostrarAnterior").innerHTML = guardarDatos;
+    let divTempActual = document.createElement('div');
+    divTempActual.id = 'temperaturaActual';
+    let pTempActual = document.createElement('p');
+    divTempActual.append(pTempActual);
+    pTempActual.innerHTML = `${Math.round(json.main.temp)}°`;
 
+    let divDescripcion = document.createElement('div');
+    divDescripcion.id = 'descripcion';
+    let pDescripcion = document.createElement('p');
+    divDescripcion.append(pDescripcion);
+
+    for (let i of iconos) {
+        let icon = json.weather[0].icon;
+        if (icon === i.id) {
+            pDescripcion.innerHTML = i.descripcion;
+        } 
     }
+
+    let divInfo = document.createElement('div');
+    divInfo.id = 'info';
+    let ulInfo = document.createElement('ul');
+    divInfo.append(ulInfo);
+
+    let liMax = document.createElement('li');
+    liMax.innerHTML = `<span>Temperatura Máxima</span> <span>${Math.round(json.main.temp_max)}°</span>`;
+
+    let liMin = document.createElement('li');
+    liMin.innerHTML = `<span>Temperatura Mínima</span> <span>${Math.round(json.main.temp_min)}°</span>`;
+
+    let liHum = document.createElement('li');
+    liHum.innerHTML = `<span>Húmedad</span> <span>${Math.round(json.main.humidity)}%</span>`;
+
+    let liSt = document.createElement('li');
+    liSt.innerHTML = `<span>Sensación Térmica</span> <span>${Math.round(json.main.feels_like)}°</span>`;
+
+    let liPa = document.createElement('li');
+    liPa.innerHTML = `<span>Presión Atmoférica</span> <span>${Math.round(json.main.pressure)} hPa</span>`;
+
+    let liVv = document.createElement('li');
+    liVv.innerHTML = `<span>Velocidad del Viento</span> <span>${Math.round(json.wind.speed)} km/h</span>`;
+
+    ulInfo.append(liMax, liMin, liHum, liSt, liPa, liVv);
+    divInfo.append(ulInfo);
+
+    divClima.append(divZona, divImg, divTempActual, divDescripcion, divInfo);
+    let section = document.querySelector('section');
+    section.append(divClima);
 }
+
+
+let latitud;
+let longitud;
+const resultadoMapa = () => {
+    fetch(`https://api.tomtom.com/map/1/staticimage?layer=basic&style=main&format=png&key=${APIKEYMAPA}&zoom=7&center=${`${longitud},${latitud}`}&width=300&height=300&view=AR&language=es-ES`)
+
+            .then(response=>{
+                let divMapa = document.createElement('div');
+                let imgMapa = document.createElement('img');
+                imgMapa.id = 'mapa';
+                imgMapa.src = response.url;
+                divMapa.append(imgMapa);
+                divClima.append(divMapa);
+            });
+}
+
 
 // EVENTO CLICK "BUSCAR"
 btn.addEventListener('click', event => {
@@ -165,74 +221,27 @@ btn.addEventListener('click', event => {
     })
 
     .then(json=>{
-        console.log(json)
 
-        let divZona = document.createElement('div');
+        console.log(json);
 
-        divZona = `<p>${json.name}</p>`;
-        resultadoZona.innerHTML = divZona;
-        divZona = '';
+        resultadoClima(json);
 
-        for (let i of iconos) {
-            let icon = json.weather[0].icon;
-            if (icon === i.id) {
-                icono = `<img src="${i.imagen}" alt="${i.alt}"/>`;
-                resultadoIcono.innerHTML = icono;
-            } 
-            console.log(icon);
-        }
-        
-        icono = '';
+        // let resultado = json.name;
+        // console.log(resultado);
 
-        tempActual = `<p>${Math.round(json.main.temp)}°</p>`;
-        resultadoTemp.innerHTML = tempActual;
-        tempActual = '';
+        latitud = json.coord.lat;
+        longitud = json.coord.lon;
 
-        info = `<div>
-                    <p>${json.weather[0].description}</p>
-                </div>
-                <ul>
-                    <li><span>Temperatura Máxima</span> <span>${Math.round(json.main.temp_max)}°</span></li>
-                    <li><span>Temperatura Mínima</span> <span>${Math.round(json.main.temp_min)}°</span></li>
-                    <li><span>Húmedad</span> <span>${Math.round(json.main.humidity)}%</span></li>
-                    <li><span>Sensación Térmica</span> <span>${Math.round(json.main.feels_like)}°</span></li>
-                    <li><span>Presión Atmoférica</span> <span>${Math.round(json.main.pressure)} hPa</span></li>
-                    <li><span>Velocidad del Viento</span> <span>${Math.round(json.wind.speed)} km/h</span></li>
-                </ul>`;
-        resultadoInfo.innerHTML = info;
-        info ='';
+        console.log(latitud, longitud);
+        resultadoMapa(longitud, latitud);
 
-        function guardarLocalStorage(){
-            if (!localStorage.getItem("busqueda")) {
-                var array_clima = [];
-            } else {
-                array_clima = JSON.parse(localStorage.busqueda);
-            }
-                
-            let datosClima = {
-                ciudad: json.name,
-                temp: Math.round(json.main.temp),
-                info: {
-                    descripcion: json.weather[0].description,
-                    max: Math.round(json.main.temp_max),
-                    min: Math.round(json.main.temp_min),
-                    hum: Math.round(json.main.humidity),
-                    st: Math.round(json.main.feels_like),
-                    presAt: Math.round(json.main.pressure),
-                    velViento: Math.round(json.wind.speed)
-                }
-            }
-                array_clima.push(datosClima);
-                localStorage.setItem("busqueda", JSON.stringify(array_clima));	
-                
-        }
+        recuperar_localStorage = localStorage.setItem("busqueda", JSON.stringify(json));
 
-        guardarLocalStorage();
     })
+
+    .catch(error=>{console.log(`Ocurrió un error: ${error}`)});
     
-    .catch(error=>{console.log(`Ocurrió un error: ${error}`)})
-
+    inputCiudad.value = '';
 });
-
 
 
